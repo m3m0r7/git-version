@@ -12,7 +12,7 @@ class VersionTest extends TestCase
 {
     public function testGetLongHash()
     {
-        $hash = Version::make(__DIR__ . '/../')->getLastHash();
+        $hash = Version::make(__DIR__ . '/../')->getHash();
         $this->assertSame(
             40,
             strlen($hash)
@@ -25,7 +25,7 @@ class VersionTest extends TestCase
 
     public function testGetShortHash()
     {
-        $hash = Version::make(__DIR__ . '/../')->getLastHash(true);
+        $hash = Version::make(__DIR__ . '/../')->getHash(true);
         $this->assertSame(
             Version::SHORT_HASH_SIZE,
             strlen($hash)
@@ -39,7 +39,7 @@ class VersionTest extends TestCase
     public function testChangeBranch()
     {
         $hash = Version::make(__DIR__ . '/../', 'refs/heads/master')
-            ->getLastHash();
+            ->getHash();
 
         $this->assertSame(
             40,
@@ -55,7 +55,7 @@ class VersionTest extends TestCase
     {
         $this->expectException(VersionException::class);
         Version::make(__DIR__ . '/../', 'invalid-branch-name')
-            ->getLastHash();
+            ->getHash();
     }
 
 
@@ -63,7 +63,7 @@ class VersionTest extends TestCase
     {
         $this->expectException(VersionException::class);
         Version::make(__DIR__ . '/invalid-directory')
-            ->getLastHash();
+            ->getHash();
     }
 
     public function testGetBranchName()

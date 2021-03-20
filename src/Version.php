@@ -25,46 +25,19 @@ class Version
         return new static($directory, $branchName);
     }
 
-    public function getLastHash(bool $short = false): string
+    public function getHash(bool $short = false): string
     {
-        $branchName = $this->branchName;
-
-        $handle = fopen(
-            static::getFile(static::getLogDirectory() . '/' . $branchName),
-            'r'
+        $hash = trim(
+            file_get_contents(
+                static::getFile($this->branchName)
+            )
         );
 
-        if (!flock($handle, LOCK_EX)) {
-            throw new VersionException('The git log is cannot lock.');
+        if ($short) {
+            return substr($hash, 0, static::SHORT_HASH_SIZE);
         }
 
-        try {
-            $line = null;
-            while (true) {
-                $tmpLine = fgets($handle);
-                if (!$tmpLine || feof($handle)) {
-                    break;
-                }
-                $line = $tmpLine;
-            }
-
-            [, $currentHash] = explode(
-                ' ',
-                preg_replace(
-                    '/\s+/',
-                    ' ',
-                    $line
-                )
-            );
-
-            if ($short) {
-                return substr($currentHash, 0, static::SHORT_HASH_SIZE);
-            }
-
-            return $currentHash;
-        } finally {
-            flock($handle, LOCK_UN);
-        }
+        return $hash;
     }
 
     public function getHEADFilePath()
