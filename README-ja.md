@@ -1,7 +1,6 @@
 |日本語|[English](./README.md)|
 
 # Git Version - PHP code version manager with Git
-このライブラリを使用することで、PHP コードのバージョンを表すために Git のコミットハッシュやタグを用いて表現することができるようになります。
 多くのライブラリの場合、原則 `git` コマンドの実行を必須としており、そのためにわざわざ不必要に別プロセスを起動するといったことが行われています。
 さらに `git` コマンドをカスタマイズやエイリアスを登録して挙動を変更しているデベロッパーも少なからずおり（私もカスタマイズしています）、git コマンドを差し替えられないという問題点がありました。
 このライブラリは `git` コマンドを一切使用せず、コミットハッシュやバージョニングされたタグの値を取得することで、安全に PHP コードのバージョニングを行えるようになっています。
@@ -11,6 +10,12 @@
 
 ```php
 <?php
+declare(strict_types=1);
+
+use GitVersion\Version;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
     __DIR__
@@ -29,6 +34,13 @@ echo $version->getHash() . "\n";
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use GitVersion\Version;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
     __DIR__
@@ -50,6 +62,13 @@ echo $version->getHash(true) . "\n";
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use GitVersion\Version;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
     __DIR__
@@ -72,6 +91,13 @@ echo $versionedTag->getHash() . "\n";
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use GitVersion\Version;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
     __DIR__
@@ -95,6 +121,13 @@ b425291e8eaf03c0c0b6948015826bb2e5049019
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+use GitVersion\Version;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
     __DIR__
