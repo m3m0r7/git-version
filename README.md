@@ -1,9 +1,17 @@
 |[日本語](./README-ja.md)|English|
 
-# Git Version - PHP code version manager with Git
+# Git Version - Git commit hash-based version manager for PHP
 Many libraries require the `git` command to be executed in principle, which unnecessarily starts a separate process.
 In addition, there are many developers who customize the `git` command or register aliases to change its behavior, and there was a problem that the `git` command could not be replaced in the libraries.
 This library never use the `git` command at all, but allows you to safely version your PHP code by retrieving commit hashes and versioned tag values.
+
+# Requirements
+- PHP >= 7.2
+
+# Install
+```
+composer require m3m0r7/git-version
+```
 
 # Get last commit hash
 Write code as same as below if you want to get last commit hash.
