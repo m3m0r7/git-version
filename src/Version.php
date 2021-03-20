@@ -13,6 +13,7 @@ class Version
     protected $gitDirectory = '.git';
     protected $headFilePath = 'HEAD';
     protected $logDirectory = 'logs';
+    protected $tagsDirectory = 'refs/tags';
 
     protected function __construct(string $directory, ?string $branchName = null)
     {
@@ -23,6 +24,47 @@ class Version
     public static function make(string $directory, ?string $branchName = null)
     {
         return new static($directory, $branchName);
+    }
+
+    protected function getVersionInfoObjectClass(): string
+    {
+        return VersionInfo::class;
+    }
+
+    public function getVersionedTag(string $specifiedVersion = null): VersionInfoInterface
+    {
+        $versions = $this->getVersions();
+        if ($specifiedVersion === null) {
+            $specifiedVersion = array_pop($versions);
+        } else {
+            if (!in_array($specifiedVersion, $versions, true)) {
+                throw new VersionException("The specified version `{$specifiedVersion}` is not found");
+            }
+        }
+
+        $versionInfoObject = $this->getVersionInfoObjectClass();
+        return new $versionInfoObject(
+            $specifiedVersion,
+            trim(
+                file_get_contents(
+                    static::getBaseDirectory() . '/' . $this->tagsDirectory . '/' . $specifiedVersion
+                )
+            )
+        );
+    }
+
+    public function getVersions(): array
+    {
+        $tags = array_map(
+            function ($fileName) {
+                return basename($fileName);
+            },
+            glob(static::getBaseDirectory() . '/' . $this->tagsDirectory . '/*')
+        );
+
+        sort($tags);
+
+        return $tags;
     }
 
     public function getHash(bool $short = false): string
@@ -60,6 +102,11 @@ class Version
         return $this->gitDirectory;
     }
 
+    public function getTagsDirectory()
+    {
+        return $this->tagsDirectory;
+    }
+
     public function setHEADFilePath(string $filePath): self
     {
         $this->headFilePath = $filePath;
@@ -88,6 +135,13 @@ class Version
         return $this;
     }
 
+    public function setTagsDirectory(string $directory): self
+    {
+        $this->tagsDirectory = $directory;
+
+        return $this;
+    }
+
     public function getBranchName(): string
     {
         $ref = file_get_contents(
@@ -100,12 +154,17 @@ class Version
 
     protected function getFile(string $path): string
     {
-        $fileName = rtrim(static::getDirectory(), '/') . '/' . static::getGitDirectory() . '/' . $path;
+        $fileName = static::getBaseDirectory() . '/' . $path;
 
         if (!is_file($fileName)) {
-            throw new VersionException("{$fileName} file not found");
+            throw new VersionException("{$fileName} file is not found");
         }
 
         return $fileName;
+    }
+
+    protected function getBaseDirectory(): string
+    {
+        return rtrim(static::getDirectory(), '/') . '/' . static::getGitDirectory();
     }
 }

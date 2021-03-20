@@ -6,6 +6,8 @@ namespace Tests;
 
 use GitVersion\Version;
 use GitVersion\VersionException;
+use GitVersion\VersionInfo;
+use GitVersion\VersionInfoInterface;
 use PHPUnit\Framework\TestCase;
 
 class VersionTest extends TestCase
@@ -94,5 +96,82 @@ class VersionTest extends TestCase
         $this->assertSame('.git-changed', $version->getGitDirectory());
         $this->assertSame('logs-changed', $version->getLogDirectory());
         $this->assertSame('dir-changed', $version->getDirectory());
+    }
+
+    public function testGetVersions()
+    {
+        $version = Version::make(__DIR__ . '/../');
+        $this->assertIsArray($version->getVersions());
+    }
+
+    public function testGetVersionedTag()
+    {
+        $version = Version::make(__DIR__ . '/../');
+        $versionedTag = $version->getVersionedTag();
+
+        $this->assertInstanceOf(VersionInfoInterface::class, $versionedTag);
+
+        $this->assertSame(
+            40,
+            strlen($versionedTag->getHash())
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\A[A-Fa-f0-9]+\z/',
+            $versionedTag->getHash()
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\A[0-9\.]+\z/',
+            $versionedTag->getVersion()
+        );
+    }
+
+    public function testGetVersionedTagShortly()
+    {
+        $version = Version::make(__DIR__ . '/../');
+        $versionedTag = $version->getVersionedTag();
+
+        $this->assertInstanceOf(VersionInfoInterface::class, $versionedTag);
+
+        $this->assertSame(
+            VersionInfo::SHORT_HASH_SIZE,
+            strlen($versionedTag->getHash(true))
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\A[A-Fa-f0-9]+\z/',
+            $versionedTag->getHash(true)
+        );
+    }
+
+    public function testGetVersionedTagSpecified()
+    {
+        $version = Version::make(__DIR__ . '/../');
+        $versionedTag = $version->getVersionedTag('0.0.1');
+
+        $this->assertInstanceOf(VersionInfoInterface::class, $versionedTag);
+
+        $this->assertSame(
+            40,
+            strlen($versionedTag->getHash())
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\A[A-Fa-f0-9]+\z/',
+            $versionedTag->getHash()
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\A[0-9\.]+\z/',
+            $versionedTag->getVersion()
+        );
+    }
+
+    public function testGetVersionedTagInvalidSpecified()
+    {
+        $this->expectException(VersionException::class);
+        $version = Version::make(__DIR__ . '/../');
+        $versionedTag = $version->getVersionedTag('invalid-specified-version');
     }
 }
