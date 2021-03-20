@@ -3,7 +3,7 @@
     "description": "Git commit hash-based version manager for PHP (Not used git command)",
     "type": "library",
     "license": "MIT",
-    "version": "0.1",
+    "version": "0.1.1",
     "keywords": [
         "git",
         "version"
