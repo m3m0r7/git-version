@@ -10,6 +10,10 @@ use GitVersion\VersionInfo;
 use GitVersion\VersionInfoInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class VersionTest extends TestCase
 {
     public function testGetLongHash()
@@ -60,7 +64,6 @@ class VersionTest extends TestCase
             ->getHash();
     }
 
-
     public function testInvalidDirectory()
     {
         $this->expectException(VersionException::class);
@@ -90,7 +93,6 @@ class VersionTest extends TestCase
             ->setGitDirectory('.git-changed')
             ->setDirectory('dir-changed')
             ->setLogDirectory('logs-changed');
-
 
         $this->assertSame('HEAD-changed', $version->getHEADFilePath());
         $this->assertSame('.git-changed', $version->getGitDirectory());

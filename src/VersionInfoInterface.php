@@ -7,5 +7,6 @@ namespace GitVersion;
 interface VersionInfoInterface
 {
     public function getHash(bool $short = false): string;
+
     public function getVersion(): string;
 }
