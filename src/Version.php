@@ -26,11 +26,6 @@ class Version
         return new static($directory, $branchName);
     }
 
-    protected function getVersionInfoObjectClass(): string
-    {
-        return VersionInfo::class;
-    }
-
     public function getVersionedTag(string $specifiedVersion = null): VersionInfoInterface
     {
         $versions = $this->getVersions();
@@ -43,6 +38,7 @@ class Version
         }
 
         $versionInfoObject = $this->getVersionInfoObjectClass();
+
         return new $versionInfoObject(
             $specifiedVersion,
             trim(
@@ -150,6 +146,11 @@ class Version
         [, $branchName] = explode(':', $ref, 2);
 
         return trim($branchName);
+    }
+
+    protected function getVersionInfoObjectClass(): string
+    {
+        return VersionInfo::class;
     }
 
     protected function getFile(string $path): string
