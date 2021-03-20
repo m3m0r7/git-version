@@ -1,0 +1,42 @@
+{
+    "name": "memory/git-version",
+    "description": "Git commit hash based version manager",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "git",
+        "version"
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "GitVersion\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "friendsofphp/php-cs-fixer": "^2.18"
+    },
+    "scripts": {
+        "lint:fix": [
+            "php-cs-fixer fix ./src",
+            "php-cs-fixer fix ./tests"
+        ]
+    },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "git diff-index --cached --name-only HEAD | composer lint:fix",
+                "git update-index --again"
+            ]
+        }
+    }
+}
