@@ -9,7 +9,7 @@
 # 最終のコミットハッシュを取得する
 最終のコミットハッシュを取得するのは簡単で、以下のように実行します。
 
-```
+```php
 <?php
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
@@ -27,7 +27,7 @@ echo $version->getHash() . "\n";
 
 もし、短いハッシュ値が必要な場合は、第一引数に true を渡すことで短いハッシュ値を取得することができます。
 
-```
+```php
 <?php
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
@@ -48,7 +48,7 @@ echo $version->getHash(true) . "\n";
 # バージョニングされたタグを取得する
 バージョニングされたタグを取得するには以下のようにします。
 
-```
+```php
 <?php
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
@@ -70,7 +70,7 @@ echo $versionedTag->getHash() . "\n";
 
 もし特定のバージョンのハッシュ値が必要な場合は `Version::getVersionedTag` の第一引数にバージョンを指定することも可能です。
 
-```
+```php
 <?php
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
@@ -93,7 +93,7 @@ b425291e8eaf03c0c0b6948015826bb2e5049019
 もちろん、このハッシュ値も短いハッシュ値として取得することも可能です。最初の方に解説した方法同様に第一引数に true を渡すことで可能です。
 
 
-```
+```php
 <?php
 $version = Version::make(
     // .git ディレクトリが設置されている場所までのパス
@@ -115,6 +115,6 @@ echo $versionedTag->getHash(true) . "\n";
 
 # PHPUnit test
 
-```
+```shell script
 ./vendor/bin/phpunit ./tests
 ```
