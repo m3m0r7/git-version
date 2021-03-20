@@ -1,8 +1,9 @@
 {
-    "name": "memory/git-version",
+    "name": "m3m0r7/git-version",
     "description": "Git commit hash based version manager",
     "type": "library",
     "license": "MIT",
+    "version": "0.1",
     "keywords": [
         "git",
         "version"
